@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarred Kern — Design · Development · Product</title>
+  <meta name="description" content="Product builder and designer. 10 years freelance web dev and branding. React, Next.js, TypeScript. I design things, I build them, and then I ship them.">
+  <meta property="og:title" content="Jarred Kern — Design · Development · Product">
+  <meta property="og:description" content="I design things, I build them, and then I ship them. Product builder and designer with 10 years of freelance web dev and branding.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#080c08">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='60' height='80' x='20' y='10' rx='4' fill='%2300ff41'/></svg>">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #080c08;
+      --bg-raised: #0e150e;
+      --bg-hover: #142014;
+      --text: #b8ccb8;
+      --text-bright: #d4ffdf;
+      --text-muted: #5a7a5a;
+      --accent: #00ff41;
+      --accent-dim: rgba(0, 255, 65, 0.12);
+      --accent-border: rgba(0, 255, 65, 0.08);
+      --mono: 'Consolas', 'Cascadia Code', 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      --width: 820px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Subtle top glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(0, 255, 65, 0.025) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    a:hover { opacity: 0.75; }
+
+    .container {
+      max-width: var(--width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── HERO ─── */
+
+    .hero {
+      padding: 120px 0 80px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .hero-name {
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: 5px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-shadow: 0 0 30px rgba(0, 255, 65, 0.15);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 38px;
+      background: var(--accent);
+      margin-left: 6px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      box-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+    }
+
+    .hero-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-statement {
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 20px;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .hero-links a {
+      color: var(--accent);
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .hero-links a:hover { opacity: 1; }
+
+    /* ─── DIVIDER ─── */
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-border), transparent 80%);
+      margin: 0 0 80px;
+    }
+
+    /* ─── SECTION ─── */
+
+    .section {
+      margin-bottom: 80px;
+    }
+
+    .section-header {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    /* ─── FEATURED PROJECT CARDS ─── */
+
+    .project-featured {
+      border: 1px solid var(--accent-border);
+      border-left: 2px solid rgba(0, 255, 65, 0.25);
+      border-radius: 4px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      background: var(--bg-raised);
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-featured:hover {
+      background: var(--bg-hover);
+      border-left-color: var(--accent);
+      box-shadow: 0 0 24px rgba(0, 255, 65, 0.03);
+    }
+
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .project-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 2px;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+    .project-links a {
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+    .project-links a:hover { color: var(--accent); opacity: 1; }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.7;
+    }
+
+    .project-tech {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .project-tech span {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border: 1px solid var(--accent-border);
+      border-radius: 3px;
+    }
+
+    /* ─── PROJECT GRID ─── */
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .project-small {
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      padding: 18px 20px;
+      background: var(--bg-raised);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .project-small:hover {
+      background: var(--bg-hover);
+      border-color: rgba(0, 255, 65, 0.15);
+    }
+
+    .project-small .project-name {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .project-small .project-name a {
+      color: var(--text-bright);
+    }
+    .project-small .project-name a:hover { color: var(--accent); }
+
+    .project-small .project-desc {
+      font-size: 12px;
+      margin-bottom: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .project-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    /* ─── STANDALONE SECTION ─── */
+
+    .standalone {
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid var(--accent-border);
+    }
+
+    /* ─── ABOUT ─── */
+
+    .about p {
+      margin-bottom: 20px;
+      max-width: 640px;
+    }
+    .about p:last-of-type { margin-bottom: 0; }
+
+    /* ─── EXPANDABLE DETAILS ─── */
+
+    details {
+      margin-top: 24px;
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 14px 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: color 0.15s, background 0.15s;
+      list-style: none;
+      background: var(--bg-raised);
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: '\25B8  ';
+      color: var(--accent);
+      opacity: 0.5;
+    }
+    details[open] summary::before { content: '\25BE  '; }
+    summary:hover {
+      color: var(--text);
+      background: var(--bg-hover);
+    }
+
+    details > div {
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ─── FOOTER ─── */
+
+    .footer {
+      padding: 60px 0 80px;
+      border-top: 1px solid var(--accent-border);
+      margin-top: 80px;
+    }
+
+    .footer-status {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--accent);
+      padding: 4px 12px;
+      border: 1px solid rgba(0, 255, 65, 0.2);
+      border-radius: 3px;
+      margin-bottom: 20px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      font-size: 13px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--accent); opacity: 1; }
+
+    /* ─── ANIMATIONS ─── */
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+
+    @media (max-width: 640px) {
+      .hero { padding: 80px 0 60px; }
+      .hero-name { font-size: 28px; letter-spacing: 3px; }
+      .cursor { height: 24px; width: 2px; }
+      .hero-subtitle { font-size: 11px; letter-spacing: 3px; }
+      .hero-statement { font-size: 15px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .section { margin-bottom: 60px; }
+      .project-featured { padding: 18px 20px; }
+      .project-top { flex-direction: column; gap: 6px; }
+      .container { padding: 0 16px; }
+      .divider { margin-bottom: 60px; }
+      .footer { padding: 40px 0 60px; margin-top: 60px; }
+    }
+
+    @media (max-width: 380px) {
+      .hero-name { font-size: 24px; letter-spacing: 2px; }
+      .hero-links { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+
+    <header class="hero">
+      <h1 class="hero-name">JARRED KERN<span class="cursor"></span></h1>
+      <div class="hero-subtitle">design &middot; development &middot; product</div>
+      <p class="hero-statement">
+        I design things, I build them, and then I ship them.
+      </p>
+      <nav class="hero-links">
+        <a href="https://github.com/CandyFlex" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/jarred-kern/" target="_blank" rel="noopener">LinkedIn</a>
+      </nav>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROJECTS ─── -->
+
+    <section class="section">
+      <h2 class="section-header">The ones worth looking at</h2>
+
+      <article class="project-featured">
+        <div class="project-top">
+          <h3 class="project-name">Saga</h3>
+          <div class="project-links">
+            <a href="https://github.com/CandyFlex/saga" target="_blank" rel="noopener">repo</a>
+            <a href="https://saga-app-nine.vercel.app" target="_blank" rel="noopener">demo</a>
+          </div>
+        </div>
+        <p class="project-desc">Campaign tracker. Designed 8 interconnected views, 19 API endpoints, PWA. The most complete project here.</p>
+        <div class="project-tech">
+          <span>Next.js</span>
+          <span>TypeScript</span>
+          <span>Prisma</span>
+          <span>PostgreSQL</span>
+        </div>
+      </article>
+
+      <article class="project-featured">
+        <div class="project-top">
+          <h3 class="project-name">Intrigue</h3>
+          <div class="project-links">
+            <a href="https://github.com/CandyFlex/intrigue" target="_blank" rel="noopener">repo</a>
+            <a href="https://intrigue-app.vercel.app" target="_blank" rel="noopener">demo</a>
+          </div>
+        </div>
+        <p class="project-desc">NPC relationship mapper. Interactive D3.js network graph I designed from scratch. The hardest design problem I've solved.</p>
+        <div class="project-tech">
+          <span>Next.js</span>
+          <span>TypeScript</span>
+          <span>D3.js</span>
+          <span>PostgreSQL</span>
+        </div>
+      </article>
+
+      <article class="project-featured">
+        <div class="project-top">
+          <h3 class="project-name">Voicecraft</h3>
+          <div class="project-links">
+            <a href="https://github.com/CandyFlex/voicecraft" target="_blank" rel="noopener">repo</a>
+          </div>
+        </div>
+        <p class="project-desc">NPC voice profiles. Mixer interface for something with no established UI pattern. Dialect coaching, sample lines.</p>
+        <div class="project-tech">
+          <span>Next.js</span>
+          <span>TypeScript</span>
+          <span>Framer Motion</span>
+        </div>
+      </article>
+
+      <h2 class="section-header" style="margin-top: 48px;">Still cooking</h2>
+
+      <div class="project-grid">
+        <article class="project-small">
+          <h3 class="project-name"><a href="https://github.com/CandyFlex/loreforge" target="_blank" rel="noopener">Loreforge</a></h3>
+          <p class="project-desc">Worldbuilding prompts. 30 across 6 categories. No AI, just structure.</p>
+        </article>
+        <article class="project-small">
+          <h3 class="project-name"><a href="https://github.com/CandyFlex/oath" target="_blank" rel="noopener">Oath</a></h3>
+          <p class="project-desc">Session zero wizard. Tone, safety tools, house rules.</p>
+        </article>
+        <article class="project-small">
+          <h3 class="project-name"><a href="https://github.com/CandyFlex/outlands" target="_blank" rel="noopener">Outlands</a></h3>
+          <p class="project-desc">Hex crawl map editor. Paint terrain, drop encounters, run exploration.</p>
+        </article>
+        <article class="project-small">
+          <h3 class="project-name"><a href="https://github.com/CandyFlex/favor" target="_blank" rel="noopener">Favor</a></h3>
+          <p class="project-desc">Faction reputation tracker. Heatmap grid so you know where everyone stands.</p>
+        </article>
+      </div>
+
+      <p class="project-note">System-agnostic. D&D, Pathfinder, Mothership, homebrew, whatever.</p>
+
+      <div class="standalone">
+        <article class="project-featured">
+          <div class="project-top">
+            <h3 class="project-name">Pinch</h3>
+            <div class="project-links">
+              <a href="https://github.com/CandyFlex/pinch" target="_blank" rel="noopener">repo</a>
+            </div>
+          </div>
+          <p class="project-desc">Claude usage monitor for Windows. Taskbar pill that goes green/yellow/red. Nothing to do with D&D — just got tired of hitting rate limits blind.</p>
+          <div class="project-tech">
+            <span>Python</span>
+            <span>tkinter</span>
+            <span>OAuth</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ─── BACKGROUND ─── -->
+
+    <section class="section about">
+      <h2 class="section-header">Background</h2>
+
+      <p>
+        Ten years running Elusive Designs — freelance web dev and branding for small businesses. WordPress, WooCommerce, brand identities, hosting, graphic design, whatever they needed. Somewhere around a hundred clients. The design side was always what pulled me in.
+      </p>
+      <p>
+        Before that, overnight shifts at a network operations center. Different world. But the troubleshooting instincts from that job carried the entire freelance business.
+      </p>
+      <p>
+        Now I'm designing and building full-stack products from scratch. React, Next.js, TypeScript, Prisma. Each project starts as a design problem, then I build the whole thing.
+      </p>
+
+      <details>
+        <summary>Stack</summary>
+        <div>
+          TypeScript, Next.js, React, Tailwind, Prisma, PostgreSQL, D3.js, Framer Motion, Python.<br><br>
+          Everything designed and built from scratch. No templates, no boilerplate.
+        </div>
+      </details>
+
+      <details>
+        <summary>History</summary>
+        <div>
+          Started in IT — overnight shifts at a network operations center. Hardware installs, structured cabling, infrastructure monitoring.<br><br>
+          Then ten years of Elusive Designs. WordPress, WooCommerce, hosting, brand identities, graphic design. Hundred-something clients, full lifecycle — from the logo to the checkout page to the DNS records.<br><br>
+          My resume reads more like a map than a ladder. That's the whole skill.
+        </div>
+      </details>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+
+    <footer class="footer">
+      <span class="footer-status">open to work</span>
+      <p class="footer-text">
+        Product, design, or development — remote preferred.<br>
+        Growing a D&D memes TikTok.<br>
+        Shelby, NC.
+      </p>
+      <nav class="footer-links">
+        <a href="https://github.com/CandyFlex" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/jarred-kern/" target="_blank" rel="noopener">LinkedIn</a>
+      </nav>
+    </footer>
+
+  </main>
+</body>
+</html>
